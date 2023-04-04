@@ -33,10 +33,10 @@ public class GameRepo {
                             .skip(skip);
         query.fields().exclude("_id")
                       .include("name", "gid");
+        // Convert the document to a list
         return mongoTemplate.find(query, Document.class, C_GAMES)
             .stream()
-            .map(doc -> doc.toJson())
-            .map(Game::toGame)
+            .map(doc -> Game.create(doc))
             .toList();
     }
 }

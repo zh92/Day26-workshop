@@ -1,10 +1,9 @@
 package sg.edu.nus.iss.Day26.models;
 
-import java.io.StringReader;
+import org.bson.Document;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 
 public class Game {
     
@@ -37,12 +36,18 @@ public class Game {
         return "Game [name=" + name + ", gid=" + gid + "]";
     }
 
-    public static Game toGame(String jsonStr) {
-        Game game = new Game();
-        JsonReader reader = Json.createReader(new StringReader(jsonStr));
-        JsonObject obj = reader.readObject();
-        game.setName(obj.getString("name"));
-        game.setGid(obj.getInt("gid"));
-        return game;
+    public static Game create(Document d) {
+        Game g = new Game();
+        g.setName(d.getString("name"));
+        g.setGid(d.getInteger("gid"));
+        return g;
+    }
+
+
+    public JsonObject toJSON() {
+        return Json.createObjectBuilder()
+                .add("name", getName())
+                .add("gid", getGid().toString())
+                .build();
     }
 }
